@@ -52,17 +52,16 @@ function nfh_has_no_rel_nofollow($text)
 function nfh_parse_external_links($matches)
 {
     $site_server_name = $_SERVER['SERVER_NAME'];
+    $nofollow = '';
 
     if (nfh_get_domain_name_from_uri($matches[3]) != $site_server_name &&   // is external site ...
         nfh_has_no_rel_nofollow( $matches[1] ) &&                           // ... and doesn't have nofollow yet
         nfh_has_no_rel_nofollow( $matches[4] ))
     {
-        return '<a rel="nofollow" href="' . $matches[2] . '//' . $matches[3] . '"' .' '. trim($matches[1]) . $matches[4] . '>' . $matches[5] . '</a>';
+        $nofollow = 'rel="nofollow" ';
     }
-    else
-    {   // Do nothing (reconstruct original ULR)
-        return '<a href="' . $matches[2] . '//' . $matches[3] . '"' .' '. trim($matches[1]) .' '. trim($matches[4]) . '>' . $matches[5] . '</a>';
-    }
+    
+    return '<a '. $nofollow .'rel="nofollow" href="' . $matches[2] . '//' . $matches[3] . '"' .' '. trim($matches[1]) .' '. trim($matches[4]) . '>' . $matches[5] . '</a>';
 }
 
 function nfh_set_nofollow($content)
